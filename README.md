@@ -1,4 +1,4 @@
-# dalto_frut
+# DaltoFrut
 
 Hackathon application.
 
