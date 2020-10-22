@@ -1,28 +1,42 @@
+import 'package:dalto_frut/take_picture_screen.dart';
 import 'package:flutter/material.dart';
 
-void main()  {
+import 'package:camera/camera.dart';
+
+Future<void> main() async {
+
+
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  // final CameraDescription camera;
+  //
+  // const MyApp({
+  //   Key key,
+  //   @required this.camera,
+  // }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'DaltoFrut',
+      initialRoute: '/',
+      routes: {
+        "/": (context) => MyHomePage(),
+        // "/take_picture_page": (context) => TakePictureScreen(camera: null,),
+      },
       theme: ThemeData(
         fontFamily: 'Nunito',
         primaryColor: Color(0xFF4EFFBB),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'DaltoFrut'),
     );
   }
 }
 
 class MyHomePage extends StatelessWidget {
-  final String title;
-  MyHomePage({this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -91,23 +105,17 @@ class MyHomePage extends StatelessWidget {
                     height: 53,
                     child: RaisedButton(
                       color: Color(0xFF4EFFBB),
-                      onPressed: (){
-                        print('Fui clicado');
-                        return showDialog( context: context,
-                            builder: (context){
-                              return AlertDialog(
-                                title: Text('DaltoFrut'),
-                                content: Text('Fui clicado !!'),
-                                actions: <Widget>[
-                                  TextButton(child: Text('Fechar'), onPressed: () {
-                                    Navigator.pop(context);
-                                  }),
-                                  TextButton(child: Text('Fechar 2'), onPressed: () {
-                                    Navigator.pop(context);
-                                  }),
-                                ],
-                              );
-                            });
+                      onPressed: () async {
+                        WidgetsFlutterBinding.ensureInitialized();
+                        final cameras = await availableCameras();
+                        final firstCamera = cameras.first;
+
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => TakePictureScreen(camera: firstCamera),
+                          ),
+                        );
                       },
                       child: ListTile(
                         title: Center(
@@ -134,4 +142,6 @@ class MyHomePage extends StatelessWidget {
     );
   }
 }
+
+
 
